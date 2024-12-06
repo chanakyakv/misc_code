@@ -16,11 +16,12 @@ solver = TwoCaptcha('483b7730b66592a812ca46d5ddd4ef3c')
 
 section_list=['A', 'B', 'C', 'D', 'E', 'F', 'G']
 #exam_list=["SOF IMO 2023-24", "SOF NSO 2023-24", "SOF IEO 2023-24", "SOF IGKO 2023-24"]
-exam_list=["SOF IEO 2023-24", "SOF IGKO 2023-24"]
+# exam_list=["SOF IEO 2023-24", "SOF IGKO 2023-24"]
+exam_list=["SOF IGKO 2024-25"]
 
-n_start=141
+n_start=1
 n_stop=270
-section_idx=4
+section_idx=0
 section=section_list[section_idx]
 print(section)
 # using chrome driver
@@ -52,7 +53,8 @@ for exam in exam_list:
         #driver.close()
 
         driver.find_element("name", 'rollid1').send_keys("KA0060")
-        driver.find_element("name", 'rollid2').send_keys("03")
+        # driver.find_element("name", 'rollid2').send_keys("03")
+        driver.find_element("name", 'rollid2').send_keys("04")
         driver.find_element("name", 'rollid3').send_keys(section)
         driver.find_element("name", 'rollid4').send_keys(str(i).zfill(3))
 
@@ -99,7 +101,7 @@ for exam in exam_list:
                 texto = [my_elem.text for my_elem in driver.find_elements(By.CLASS_NAME, "result-cards-no-border")]
                 texto[0].splitlines()
                 try_captcha_again=0
-            except:
+            except Exception as e:
                 if "wrong" in driver.find_element(By.XPATH, '//div[@id="edit-description"]/h2').text:
                     consc_fails=consc_fails+1
                     if section_idx < len(section_list)-1:
@@ -116,6 +118,7 @@ for exam in exam_list:
                         raise Exception("***ERROR***: Wrong Roll Number")
                 else:
                     print("ERROR: Wrong Captcha?")
+                    print(e)
                     try_captcha_again=1
                     bad_count_captcha=bad_count_captcha+1
                     print("Total Captcha: ", total_count_captcha, ".   Good: ", good_count_captcha, ".   Bad: ", bad_count_captcha)
