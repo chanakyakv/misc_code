@@ -15,6 +15,8 @@ def get_daily_volatility(symbol, series, start_date, end_date):
     # Fetch historical stock prices
     historical_data = equity_history(symbol, series, start_date, end_date)
     df = pd.DataFrame(historical_data) 
+    df.to_csv("test_pre.csv")
+
     df = df.drop('CA', axis=1)
     df = df.drop('_id', axis=1)
     df = df.drop_duplicates()
