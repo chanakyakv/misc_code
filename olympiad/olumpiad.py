@@ -6,24 +6,42 @@ import re
 import pandas as pd 
 from twocaptcha import TwoCaptcha
 import urllib.request
+import sys
+
+# cd C:\Users\a0131903\Documents\git_workspaces\personal_git_hub_misc_code
+# & C:/Users/a0131903/AppData/Local/Programs/Python/Python312/python.exe c:/Users/a0131903/Documents/git_workspaces/personal_git_hub_misc_code/misc_code/olympiad/olumpiad.py 6
 
 
 opener = urllib.request.build_opener()
 opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 urllib.request.install_opener(opener)
 
-solver = TwoCaptcha('483b7730b66592a812ca46d5ddd4ef3c')
+# solver = TwoCaptcha('483b7730b66592a812ca46d5ddd4ef3c')
+# solver = TwoCaptcha('4d64985a9f56401c248c13fbf9bf13cb')
+solver = TwoCaptcha('abf71bdbc4e114707133c47bc4266939')
 
-section_list=['A', 'B', 'C', 'D', 'E', 'F', 'G']
+# section_list=['A', 'B', 'C', 'D', 'E', 'F', 'G']
 #exam_list=["SOF IMO 2023-24", "SOF NSO 2023-24", "SOF IEO 2023-24", "SOF IGKO 2023-24"]
 # exam_list=["SOF IEO 2023-24", "SOF IGKO 2023-24"]
-exam_list=["SOF IGKO 2024-25"]
+# exam_list=["SOF IGKO 2024-25"]
+# exam_list=["SOF IEO 2024-25"]
+# exam_list=["SOF NSO 2024-25"]
+exam_list=["SOF IMO 2024-25"]
 
-n_start=1
-n_stop=270
-section_idx=0
+section_list=['A', 'B', 'C', 'D', 'E', 'F', 'G']
+
+n_start_l=[1,34,67,100,133,166,199]
+n_stop_l=[33,66,99,132,165,198,231]
+section_idx=int(sys.argv[1])
+
+# n_start_l=[1]
+# n_stop_l=[270]
+# section_idx=0
+
 section=section_list[section_idx]
 print(section)
+n_start=n_start_l[section_idx]
+n_stop=n_stop_l[section_idx]
 # using chrome driver
 driver=webdriver.Chrome()
 
@@ -75,7 +93,7 @@ for exam in exam_list:
                 #driver.close()
 
                 driver.find_element("name", 'rollid1').send_keys("KA0060")
-                driver.find_element("name", 'rollid2').send_keys("03")
+                driver.find_element("name", 'rollid2').send_keys("04")
                 driver.find_element("name", 'rollid3').send_keys(section)
                 driver.find_element("name", 'rollid4').send_keys(str(i).zfill(3))
                 wrong_section=0
@@ -88,9 +106,9 @@ for exam in exam_list:
 
                 #captcha = input("Enter Captcha: ") 
                 #captcha = solver.normal(src, param1=..., ...)
-                urllib.request.urlretrieve(src, "captcha.jfif")
+                urllib.request.urlretrieve(src, "captcha_"+str(section)+".jfif")
                 total_count_captcha=total_count_captcha+1
-                captcha = solver.normal("captcha.jfif")
+                captcha = solver.normal("captcha_"+str(section)+".jfif")
                 #print(captcha)
                 print("Decoded Captcha: ", captcha['code'])
                 driver.find_element("name", 'captcha_response').send_keys(captcha['code'])
@@ -146,7 +164,9 @@ for exam in exam_list:
             print(dict1)
             list_dict.append(dict1)
             df = pd.DataFrame(list_dict) 
-            df.to_csv("olympiad.csv")
+            # df.to_csv("olympiad.csv")
+            df.to_csv("olympiad_"+str(section)+".csv")
+
 
     n_start=1
 
